@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>清序工作室</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f7f4ef;
+      --surface: #fffdf8;
+      --text: #20201d;
+      --muted: #6c6a63;
+      --line: #ddd7ca;
+      --accent: #315f54;
+      --accent-soft: #dce8e2;
+      --warm: #c77d3b;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid rgba(32, 32, 29, 0.08);
+      background: rgba(247, 244, 239, 0.86);
+      backdrop-filter: blur(18px);
+    }
+
+    .nav {
+      width: min(1120px, calc(100% - 40px));
+      min-height: 72px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+
+    .brand-mark {
+      width: 28px;
+      height: 28px;
+      display: inline-grid;
+      place-items: center;
+      border: 1px solid var(--accent);
+      border-radius: 50%;
+      color: var(--accent);
+      font-size: 14px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .page {
+      overflow: hidden;
+    }
+
+    .section {
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .hero {
+      min-height: calc(100vh - 72px);
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.95fr);
+      align-items: center;
+      gap: 64px;
+      padding: 72px 0 56px;
+    }
+
+    .eyebrow {
+      margin: 0 0 18px;
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 700px;
+      font-size: clamp(44px, 8vw, 92px);
+      line-height: 0.98;
+      letter-spacing: 0;
+      font-weight: 760;
+    }
+
+    .hero-copy {
+      max-width: 620px;
+      margin: 28px 0 0;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 36px;
+    }
+
+    .button {
+      min-height: 46px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--text);
+      border-radius: 999px;
+      padding: 0 20px;
+      font-size: 14px;
+      font-weight: 700;
+      transition: transform 160ms ease, background 160ms ease, color 160ms ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+    }
+
+    .button.primary {
+      background: var(--text);
+      color: var(--surface);
+    }
+
+    .button.secondary {
+      color: var(--text);
+      background: transparent;
+    }
+
+    .hero-visual {
+      position: relative;
+      min-height: 500px;
+      border-left: 1px solid var(--line);
+      padding-left: 38px;
+    }
+
+    .image-frame {
+      height: 420px;
+      border-radius: 8px;
+      overflow: hidden;
+      background:
+        linear-gradient(135deg, rgba(49, 95, 84, 0.18), rgba(199, 125, 59, 0.12)),
+        url("https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1200&q=80") center / cover;
+      filter: saturate(0.86);
+    }
+
+    .metric-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 253, 248, 0.9);
+      transform: translateY(-42px);
+    }
+
+    .metric {
+      min-height: 112px;
+      padding: 20px;
+      border-right: 1px solid var(--line);
+    }
+
+    .metric:last-child {
+      border-right: 0;
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 28px;
+      line-height: 1.1;
+    }
+
+    .metric span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .intro {
+      display: grid;
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: 72px;
+      padding: 96px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .section-title {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 48px);
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+
+    .section-copy {
+      margin: 0;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .services {
+      padding: 96px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      margin-top: 40px;
+      background: var(--line);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .service {
+      min-height: 250px;
+      padding: 30px;
+      background: var(--surface);
+    }
+
+    .service-number {
+      color: var(--warm);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .service h3 {
+      margin: 44px 0 12px;
+      font-size: 22px;
+      line-height: 1.2;
+    }
+
+    .service p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .work {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 44px;
+      padding: 96px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .work-image {
+      min-height: 430px;
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, rgba(32, 32, 29, 0.04), rgba(32, 32, 29, 0.16)),
+        url("https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=1200&q=80") center / cover;
+      filter: saturate(0.9);
+    }
+
+    .work-content {
+      align-self: end;
+      padding-bottom: 14px;
+    }
+
+    .work-list {
+      margin: 34px 0 0;
+      padding: 0;
+      list-style: none;
+      border-top: 1px solid var(--line);
+    }
+
+    .work-list li {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+    }
+
+    .work-list b {
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .contact {
+      padding: 96px 0 116px;
+      border-top: 1px solid var(--line);
+      text-align: center;
+    }
+
+    .contact .section-title {
+      max-width: 780px;
+      margin: 0 auto;
+    }
+
+    .contact p {
+      max-width: 620px;
+      margin: 24px auto 0;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .site-footer {
+      border-top: 1px solid var(--line);
+    }
+
+    .footer-inner {
+      width: min(1120px, calc(100% - 40px));
+      min-height: 78px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    @media (max-width: 860px) {
+      .nav {
+        min-height: 64px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .hero,
+      .intro,
+      .work {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        min-height: auto;
+        gap: 42px;
+        padding-top: 54px;
+      }
+
+      .hero-visual {
+        min-height: auto;
+        border-left: 0;
+        padding-left: 0;
+      }
+
+      .image-frame {
+        height: 340px;
+      }
+
+      .intro,
+      .services,
+      .work,
+      .contact {
+        padding: 72px 0;
+      }
+
+      .service-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .metric-strip {
+        grid-template-columns: 1fr;
+        transform: none;
+        margin-top: 16px;
+      }
+
+      .metric {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .metric:last-child {
+        border-bottom: 0;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .section,
+      .nav,
+      .footer-inner {
+        width: min(100% - 28px, 1120px);
+      }
+
+      .hero-copy,
+      .section-copy,
+      .contact p {
+        font-size: 16px;
+      }
+
+      .actions {
+        width: 100%;
+      }
+
+      .button {
+        width: 100%;
+      }
+
+      .work-list li,
+      .footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav" aria-label="主导航">
+      <a class="brand" href="#top" aria-label="清序工作室首页">
+        <span class="brand-mark">清</span>
+        <span>清序工作室</span>
+      </a>
+      <div class="nav-links">
+        <a href="#about">关于</a>
+        <a href="#services">服务</a>
+        <a href="#work">案例</a>
+        <a href="#contact">联系</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="top" class="page">
+    <section class="section hero" aria-labelledby="hero-title">
+      <div>
+        <p class="eyebrow">Minimal Digital Studio</p>
+        <h1 id="hero-title">把复杂想法整理成清晰体验。</h1>
+        <p class="hero-copy">
+          我们为品牌、产品和内容团队设计简洁、耐看、易维护的数字界面，让信息被准确理解，让行动自然发生。
+        </p>
+        <div class="actions">
+          <a class="button primary" href="#contact">开始沟通</a>
+          <a class="button secondary" href="#work">查看案例</a>
+        </div>
+      </div>
+
+      <div class="hero-visual" aria-hidden="true">
+        <div class="image-frame"></div>
+        <div class="metric-strip">
+          <div class="metric">
+            <strong>12+</strong>
+            <span>行业项目经验</span>
+          </div>
+          <div class="metric">
+            <strong>48h</strong>
+            <span>快速原型反馈</span>
+          </div>
+          <div class="metric">
+            <strong>92%</strong>
+            <span>客户复购率</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="section intro" aria-labelledby="about-title">
+      <h2 id="about-title" class="section-title">少一点装饰，多一点秩序。</h2>
+      <p class="section-copy">
+        清序工作室专注于单页官网、产品介绍页和轻量品牌系统。我们从内容结构出发，建立明确的信息层级，再用留白、排版和细节交互完成表达。视觉不会喧宾夺主，但会让页面显得可信、稳定、有温度。
+      </p>
+    </section>
+
+    <section id="services" class="section services" aria-labelledby="services-title">
+      <p class="eyebrow">What We Do</p>
+      <h2 id="services-title" class="section-title">从策略到落地的一页式体验。</h2>
+      <div class="service-grid">
+        <article class="service">
+          <span class="service-number">01</span>
+          <h3>内容梳理</h3>
+          <p>整理核心卖点、访问路径与转化目标，让页面先拥有清晰骨架。</p>
+        </article>
+        <article class="service">
+          <span class="service-number">02</span>
+          <h3>界面设计</h3>
+          <p>建立克制的视觉语言，兼顾品牌识别、阅读效率与移动端体验。</p>
+        </article>
+        <article class="service">
+          <span class="service-number">03</span>
+          <h3>前端实现</h3>
+          <p>交付干净、响应式、易修改的静态页面，方便上线与后续维护。</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="work" class="section work" aria-labelledby="work-title">
+      <div class="work-image" aria-hidden="true"></div>
+      <div class="work-content">
+        <p class="eyebrow">Selected Work</p>
+        <h2 id="work-title" class="section-title">近期项目方向</h2>
+        <ul class="work-list">
+          <li><b>品牌发布页</b><span>从概念到上线</span></li>
+          <li><b>SaaS 产品页</b><span>突出功能与信任感</span></li>
+          <li><b>个人作品集</b><span>克制展示专业履历</span></li>
+          <li><b>活动报名页</b><span>优化信息与转化路径</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="contact" class="section contact" aria-labelledby="contact-title">
+      <p class="eyebrow">Contact</p>
+      <h2 id="contact-title" class="section-title">有一个页面需要被认真整理？</h2>
+      <p>告诉我们你的目标、受众和预计上线时间，我们会给出清晰的页面方向与执行建议。</p>
+      <div class="actions" style="justify-content: center;">
+        <a class="button primary" href="mailto:hello@example.com">hello@example.com</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span>© 2026 清序工作室</span>
+      <span>Designed for clarity and calm.</span>
+    </div>
+  </footer>
+</body>
+</html>
