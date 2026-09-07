@@ -1,1 +1,1 @@
-Claude opus4.8
+GPT 5.5
